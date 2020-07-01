@@ -27,6 +27,10 @@ namespace LoginSampleBackend.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(x => x.AddPolicy("test", opt =>
+            {
+                opt.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            }));
             services.AddScoped<IUserAccountService, UserAccountManager>(); 
             //Biri IUserAccountService þeklinde bir þey isterse biz ona UserAccountManager veriyor olacaðýz.
             services.AddScoped<IUserAccountDal, EfUserAccountDal>(); //
@@ -43,7 +47,8 @@ namespace LoginSampleBackend.WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors("test");
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
